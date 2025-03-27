@@ -67,6 +67,7 @@ Future<void> generateAndDownloadPDF(BuildContext context, String name, String em
   } else {
     String? filePath = await generatePDF(name, email, phone, message);
     if (filePath != null) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("PDF saved at: $filePath")));
     }
   }

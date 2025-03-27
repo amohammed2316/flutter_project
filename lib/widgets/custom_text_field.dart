@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -8,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final int maxLines;
   final FormFieldValidator<String>? validator;
 
+  // ignore: use_super_parameters
   const CustomTextField({
     Key? key,
     required this.controller,

@@ -7,9 +7,11 @@ import '../utils/email_validator.dart';
 import '../widgets/custom_text_field.dart';
 
 class FormScreen extends StatefulWidget {
+  // ignore: use_super_parameters
   const FormScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _FormScreenState createState() => _FormScreenState();
 }
 
