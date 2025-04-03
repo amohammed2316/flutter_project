@@ -1,16 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
-import 'dart:js_interop';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:web/web.dart' as web;
-@JS('URL.createObjectURL')
-external String createObjectURL(web.Blob blob);
-
-@JS('URL.revokeObjectURL')
-external void revokeObjectURL(String url);
 
 // Generates a PDF and returns bytes (for Web)
 Future<Uint8List> generatePDFBytes(String name, String email, String phone, String message) async {
@@ -53,17 +48,11 @@ Future<void> generateAndDownloadPDF(BuildContext context, String name, String em
   final pdfBytes = await generatePDFBytes(name, email, phone, message);
 
   if (kIsWeb) {
-    // ignore: invalid_runtime_check_with_js_interop_types
-    final blob = web.Blob([pdfBytes] as JSArray<web.BlobPart>, 'application/pdf' as web.BlobPropertyBag);
-    final url = createObjectURL(blob);
-
-    
-    final anchor = web.document.createElement('a') as web.HTMLAnchorElement;
-    anchor.href = url;
-    anchor.setAttribute('download', 'form_details.pdf');
-    anchor.click();
-
-    revokeObjectURL(url);
+    final base64 = base64Encode(pdfBytes);
+    final anchor = web.document.createElement('a') as web.HTMLAnchorElement..href='data:application/pdf;base64,$base64' ..download = 'form_details.pdf';
+     web.document.body!.appendChild(anchor);
+      anchor.click();
+      web.document.body!.removeChild(anchor);
   } else {
     String? filePath = await generatePDF(name, email, phone, message);
     if (filePath != null) {
